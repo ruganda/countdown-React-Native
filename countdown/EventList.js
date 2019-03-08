@@ -1,31 +1,57 @@
-import React from 'react';
-import { FlatList, Text }  from 'react-native';
-import events from './db'
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  FlatList,
+} from 'react-native';
+
 import EventCard from './EventCard';
 
-class EventList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {  
-            events:[]
-        }
+const styles = StyleSheet.create({
+  list: {
+    flex: 1,
+    paddingTop: 20,
+    backgroundColor: '#F3F3F3'
+  },
+});
 
-    }
-    
-    componentDidMount() {
-        this.setState({events: events.events});
-    }
+class EventList extends Component {
+  state = {
+    events: [],
+  }
 
-    render() { 
-        console.log(this.state.events, '....====>>');
-        return ( 
-            <FlatList
-            data ={this.state.events}
-            renderItem ={({item}) => <EventCard event={item}> {item.title} </EventCard>}
-            keyExtractor={item => item.id}
-            />
-         ); 
-    } 
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        events: this.state.events.map(evt => ({
+          ...evt,
+          timer: Date.now(),
+        })),
+      });
+    }, 1000);
+
+    const events = require('./db.json').events.map(e => ({
+      ...e,
+      date: new Date(e.date),
+    }));
+    this.setState({ events });
+  }
+
+
+  render() {
+    return (
+      <FlatList
+        key="flatlist"
+        data={this.state.events}
+        style={styles.list}
+        keyExtractor={item => item.id}
+        renderItem={({ item, separators }) => (
+          <EventCard
+            event={item}
+          />
+        )}
+      />
+    );
+  }
 }
- 
+
 export default EventList;
