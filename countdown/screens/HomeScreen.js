@@ -1,26 +1,23 @@
-import React from 'react';
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { WebBrowser } from 'expo';
 
-import { MonoText } from '../components/StyledText';
+import { YellowBox } from 'react-native';
 import EventList from '../EventList';
+import EventForm from '../EventForm';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
 
-export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
+YellowBox.ignoreWarnings([
+  'Warning: componentWillMount is deprecated',
+  'Warning: componentWillReceiveProps is deprecated',
+]);
 
-  render() {
-    return (
-      <EventList/>
-    );
+
+const MainNavigation = createStackNavigator({
+  list:{
+    screen: EventList
+  },
+  form:{
+    screen: EventForm
   }
-}
+
+});
+const App = createAppContainer(MainNavigation);
+export default App;
