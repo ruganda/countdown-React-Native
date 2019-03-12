@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 
 import EventCard from './EventCard';
+import ActionButtons from 'react-native-action-button';
 
 const styles = StyleSheet.create({
   list: {
@@ -17,6 +18,9 @@ const styles = StyleSheet.create({
 class EventList extends Component {
   state = {
     events: [],
+  }
+  static navigationOptions ={
+    title: 'Events'
   }
 
   componentDidMount() {
@@ -36,9 +40,12 @@ class EventList extends Component {
     this.setState({ events });
   }
 
+  handleAddEvent = () =>{
+      this.props.navigation.navigate('form')
+  }
 
   render() {
-    return (
+    return [
       <FlatList
         key="flatlist"
         data={this.state.events}
@@ -49,8 +56,13 @@ class EventList extends Component {
             event={item}
           />
         )}
+      />,
+      <ActionButtons 
+      key ='tab'
+      onPress={this.handleAddEvent}
+      buttonColour="rgba 231, 76, 60, 1"
       />
-    );
+    ];
   }
 }
 
